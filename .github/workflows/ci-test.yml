@@ -28,7 +28,7 @@ jobs:
       - name: Install Bootstrap Dependencies
         run: |
           apt-get update -qq
-          apt-get install -y -qq git curl ca-certificates sudo make
+          apt-get install -y -qq git curl ca-certificates sudo make libgtk-3-0 libnss3 libxss1 libasound2
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -94,7 +94,7 @@ jobs:
     steps:
       - name: Install Bootstrap Dependencies
         run: |
-          pacman -Syu --noconfirm git curl sudo make fakeroot
+          pacman -Syu --noconfirm git curl sudo make fakeroot gtk3 nss libxss alsa-lib
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
