@@ -46,9 +46,17 @@ exec /opt/$PACKAGE_NAME/start.sh "\$@"
 EOF
     chmod 0755 "$PKG_ROOT/usr/bin/$PACKAGE_NAME"
 
-    sed -e "s|__EXEC__|/opt/$PACKAGE_NAME/start.sh %F|g" "$DESKTOP_TEMPLATE" \
-        > "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
-    chmod 0644 "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" \
+            "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
+        chmod 0644 "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
+    fi
+
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" \
+            "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME-url-handler.desktop"
+        chmod 0644 "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME-url-handler.desktop"
+    fi
 
     if [ -f "$APP_DIR/.codebuddycn-linux/codebuddycn.png" ]; then
         cp "$APP_DIR/.codebuddycn-linux/codebuddycn.png" \

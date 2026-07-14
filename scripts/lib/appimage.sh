@@ -3,17 +3,29 @@
 
 LINUXDEPLOY_URL="${LINUXDEPLOY_URL:-https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage}"
 LINUXDEPLOY_BIN="${LINUXDEPLOY_BIN:-$REPO_DIR/build/tools/linuxdeploy-x86_64.AppImage}"
+APPIMAGE_RUNTIME_URL="${APPIMAGE_RUNTIME_URL:-https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64}"
+APPIMAGE_RUNTIME_BIN="${APPIMAGE_RUNTIME_BIN:-$REPO_DIR/build/tools/runtime-x86_64}"
 
 download_linuxdeploy() {
     if [ -x "$LINUXDEPLOY_BIN" ]; then
         info "linuxdeploy already cached: $LINUXDEPLOY_BIN"
-        return 0
+    else
+        mkdir -p "$(dirname "$LINUXDEPLOY_BIN")"
+        info "Downloading linuxdeploy ..."
+        curl -fSL --progress-bar -o "$LINUXDEPLOY_BIN" "$LINUXDEPLOY_URL"
+        chmod +x "$LINUXDEPLOY_BIN"
+        info "linuxdeploy saved: $LINUXDEPLOY_BIN"
     fi
-    mkdir -p "$(dirname "$LINUXDEPLOY_BIN")"
-    info "Downloading linuxdeploy ..."
-    curl -fSL --progress-bar -o "$LINUXDEPLOY_BIN" "$LINUXDEPLOY_URL"
-    chmod +x "$LINUXDEPLOY_BIN"
-    info "linuxdeploy saved: $LINUXDEPLOY_BIN"
+
+    if [ -x "$APPIMAGE_RUNTIME_BIN" ]; then
+        info "AppImage runtime already cached: $APPIMAGE_RUNTIME_BIN"
+    else
+        mkdir -p "$(dirname "$APPIMAGE_RUNTIME_BIN")"
+        info "Downloading AppImage runtime ..."
+        curl -fSL --progress-bar -o "$APPIMAGE_RUNTIME_BIN" "$APPIMAGE_RUNTIME_URL"
+        chmod +x "$APPIMAGE_RUNTIME_BIN"
+        info "AppImage runtime saved: $APPIMAGE_RUNTIME_BIN"
+    fi
 }
 
 prepare_appdir() {
@@ -45,21 +57,23 @@ build_appimage() {
     local workdir="$3"
     local icon_path="$appdir/usr/share/icons/hicolor/256x256/apps/codebuddycn.png"
 
-    # Custom AppRun - linuxdeploy won't accept shell scripts as Exec,
-    # so we provide our own AppRun directly.
-    # Must live outside the AppDir so linuxdeploy can copy it in.
     local apprun_src="$workdir/AppRun"
     cat > "$apprun_src" <<'APPRUN'
 #!/bin/bash
 SELF_DIR="$(dirname "$(readlink -f "$0")")"
-exec "$SELF_DIR/usr/bin/codebuddycn-app/start.sh" "$@"
+export ELECTRON_DISABLE_SANDBOX=1
+exec "$SELF_DIR/usr/bin/codebuddycn-app/buddycn" --no-sandbox "$@"
 APPRUN
     chmod 0755 "$apprun_src"
 
-    # Desktop entry - also outside AppDir to avoid copy-to-self errors.
     local desktop_src="$workdir/$PACKAGE_NAME.desktop"
-    sed -e "s|__EXEC__|codebuddy-ide-cn %F|g" "$DESKTOP_TEMPLATE" \
-        > "$desktop_src"
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" ]; then
+        sed -e "s|/usr/bin/$PACKAGE_NAME|$PACKAGE_NAME|g" \
+            "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" > "$desktop_src"
+    else
+        sed -e "s|__EXEC__|$PACKAGE_NAME %F|g" "$DESKTOP_TEMPLATE" \
+            > "$desktop_src"
+    fi
     chmod 0644 "$desktop_src"
 
     info "Building AppImage ..."
@@ -77,7 +91,7 @@ APPRUN
     fi
 
     # --appimage-extract-and-run avoids requiring FUSE at build time
-    ARCH=x86_64 "$LINUXDEPLOY_BIN" "${deploy_args[@]}" >&2
+    LDAI_RUNTIME_FILE="$APPIMAGE_RUNTIME_BIN" ARCH=x86_64 "$LINUXDEPLOY_BIN" "${deploy_args[@]}" >&2
 
     # linuxdeploy writes the AppImage into the current directory
     local generated

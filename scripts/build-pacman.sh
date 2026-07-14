@@ -36,14 +36,18 @@ main() {
     mkdir -p "$source_root"
     cp -a "$APP_DIR/." "$source_root/"
 
-    sed -e "s|__EXEC__|/opt/$PACKAGE_NAME/start.sh %F|g" "$DESKTOP_TEMPLATE" \
-        > "$PKG_WORK/$PACKAGE_NAME.desktop"
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" "$PKG_WORK/$PACKAGE_NAME.desktop"
+    fi
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" "$PKG_WORK/$PACKAGE_NAME-url-handler.desktop"
+    fi
 
     cat > "$PKG_WORK/PKGBUILD" <<EOF
 pkgname=$PACKAGE_NAME
 pkgver=$PACMAN_VERSION
 pkgrel=1
-pkgdesc='Unofficial local Linux conversion of CodeBuddy IDE CN'
+pkgdesc='Unofficial local Linux repackaging of CodeBuddy IDE CN'
 arch=('$arch')
 license=('MIT')
 depends=('gtk3' 'nss' 'libxss' 'alsa-lib' 'libsecret' 'libxkbfile')
@@ -60,6 +64,7 @@ exec /opt/$PACKAGE_NAME/start.sh "\$@"
 SCRIPT
   chmod 0755 "\$pkgdir/usr/bin/$PACKAGE_NAME"
   install -m 0644 "$PKG_WORK/$PACKAGE_NAME.desktop" "\$pkgdir/usr/share/applications/$PACKAGE_NAME.desktop"
+  install -m 0644 "$PKG_WORK/$PACKAGE_NAME-url-handler.desktop" "\$pkgdir/usr/share/applications/$PACKAGE_NAME-url-handler.desktop"
   if [ -f "$source_root/.codebuddycn-linux/codebuddycn.png" ]; then
     install -m 0644 "$source_root/.codebuddycn-linux/codebuddycn.png" "\$pkgdir/usr/share/icons/hicolor/256x256/apps/codebuddycn.png"
   fi

@@ -174,7 +174,15 @@ rebuild_native_modules() {
     info "Native modules before cleanup:"
     native_module_report "$app_dir" >&2
     remove_known_wrong_platform_modules "$app_dir"
-    refresh_platform_packages "$app_dir"
+
+    # Only refresh platform packages if they are missing compiled native binaries
+    local has_watcher
+    has_watcher=$(find "$app_dir/node_modules/@parcel/watcher" -name "*.node" 2>/dev/null | head -1)
+    if [ -z "$has_watcher" ]; then
+        refresh_platform_packages "$app_dir"
+    else
+        info "Platform package @parcel/watcher already has native binary, skipping refresh"
+    fi
 
     # ------------------------------------------------------------------
     # Collect versions of native modules that need a from-source rebuild
@@ -207,6 +215,15 @@ rebuild_native_modules() {
             warn "Module $module_name not found in app; skipping"
             continue
         fi
+
+        # Skip rebuild if native binaries already exist
+        local has_node
+        has_node=$(find "$app_dir/node_modules/$module_name" -name "*.node" 2>/dev/null | head -1)
+        if [ -n "$has_node" ]; then
+            info "Module $module_name already has precompiled binary ($has_node), skipping rebuild"
+            continue
+        fi
+
         build_native_module_fresh "$app_dir" "$module_name" "$module_version" 0
     done
 
@@ -217,6 +234,15 @@ rebuild_native_modules() {
             warn "Module $module_name not found in app; skipping"
             continue
         fi
+
+        # Skip rebuild if native binaries already exist
+        local has_node
+        has_node=$(find "$app_dir/node_modules/$module_name" -name "*.node" 2>/dev/null | head -1)
+        if [ -n "$has_node" ]; then
+            info "Module $module_name already has precompiled binary ($has_node), skipping rebuild"
+            continue
+        fi
+
         build_native_module_fresh "$app_dir" "$module_name" "$module_version" 1
     done
 

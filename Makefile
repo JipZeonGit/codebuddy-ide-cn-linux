@@ -1,14 +1,14 @@
 SHELL := /bin/bash
 
-# ── CodeBuddy DMG download config ──────────────────────────────────
+# ── CodeBuddy DEB download config ──────────────────────────────────
 # Only update these three values when a new version is released.
-CB_VERSION  := 4.9.15
-CB_BUILD    := 31887257
-CB_HASH     := cbd94294
+CB_VERSION  := 4.10.1
+CB_BUILD    := 33158423
+CB_HASH     := 3ad58bcb
 # ───────────────────────────────────────────────────────────────────
-CB_BASE_URL     := https://download.codebuddy.cn/aiide/darwin-x64/CodeBuddy-darwin-x64-
-CB_SUFFIX       := -cn.dmg
-DMG_URL         := $(CB_BASE_URL)$(CB_VERSION).$(CB_BUILD)-$(CB_HASH)$(CB_SUFFIX)
+CB_BASE_URL     := https://download.codebuddy.cn/aiide/linux-x64/CodeBuddy-linux-x64-
+CB_SUFFIX       := -cn.deb
+DEB_URL         := $(CB_BASE_URL)$(CB_VERSION).$(CB_BUILD)-$(CB_HASH)$(CB_SUFFIX)
 
 # ── AppImage config ───────────────────────────────────────────────
 LINUXDEPLOY_URL := https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
@@ -37,10 +37,10 @@ deps:
 	bash scripts/install-deps.sh
 
 download:
-	bash scripts/download.sh "$(DMG_URL)"
+	bash scripts/download.sh "$(DEB_URL)"
 
 build-app:
-	@if [ -n "$(DMG)" ]; then bash install.sh "$(DMG)"; else bash install.sh; fi
+	@if [ -n "$(DEB)" ]; then bash install.sh "$(DEB)"; else bash install.sh; fi
 
 codebuddycn-app/start.sh:
 	$(MAKE) build-app

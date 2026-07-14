@@ -48,8 +48,15 @@ exec /opt/$PACKAGE_NAME/start.sh "\$@"
 EOF
     chmod 0755 "$PKG_ROOT/usr/bin/$PACKAGE_NAME"
 
-    sed -e "s|__EXEC__|/opt/$PACKAGE_NAME/start.sh %F|g" "$DESKTOP_TEMPLATE" \
-        > "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME.desktop" \
+            "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME.desktop"
+    fi
+
+    if [ -f "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" ]; then
+        cp "$APP_DIR/.codebuddycn-linux/$PACKAGE_NAME-url-handler.desktop" \
+            "$PKG_ROOT/usr/share/applications/$PACKAGE_NAME-url-handler.desktop"
+    fi
 
     if [ -f "$APP_DIR/.codebuddycn-linux/codebuddycn.png" ]; then
         cp "$APP_DIR/.codebuddycn-linux/codebuddycn.png" \
@@ -65,6 +72,13 @@ EOF
     changelog_date="$(date -u '+%a %b %d %Y')"
 
     cat > "$SPEC_FILE" <<EOF
+%define _use_internal_dependency_generator 0
+%define __find_requires %{nil}
+%define __find_provides %{nil}
+%define debug_package %{nil}
+%define __check_files %{nil}
+%define _binary_payload w3.gzdio
+
 Name: $PACKAGE_NAME
 Version: $RPM_VERSION
 Release: 1%{?dist}
@@ -75,9 +89,8 @@ Requires: gtk3, nss, libXScrnSaver, alsa-lib, libsecret, libxkbfile
 Conflicts: codebuddycn-ide, codebuddy-cn-ide
 
 %description
-This package is generated locally from a user-owned official CodeBuddy IDE CN
-macOS copy. It does not redistribute upstream software through the source
-repository.
+This package is repackaged locally from the official CodeBuddy IDE CN Debian package.
+It does not redistribute upstream software through the source repository.
 
 %install
 mkdir -p %{buildroot}
@@ -87,6 +100,7 @@ cp -a $PKG_ROOT/. %{buildroot}/
 /opt/$PACKAGE_NAME
 /usr/bin/$PACKAGE_NAME
 /usr/share/applications/$PACKAGE_NAME.desktop
+/usr/share/applications/$PACKAGE_NAME-url-handler.desktop
 $icon_files_entry
 
 %changelog
