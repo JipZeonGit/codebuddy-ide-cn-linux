@@ -33,6 +33,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads
+          key: upstream-deb-${{ hashFiles('Makefile') }}
+
       - name: Install Project Dependencies
         run: |
           make deps
@@ -65,6 +71,12 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads
+          key: upstream-deb-${{ hashFiles('Makefile') }}
 
       - name: Install Project Dependencies
         run: |
@@ -101,6 +113,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads
+          key: upstream-deb-${{ hashFiles('Makefile') }}
+
       - name: Install Project Dependencies
         run: |
           make deps
@@ -135,6 +153,18 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads
+          key: upstream-deb-${{ hashFiles('Makefile') }}
+
+      - name: Cache build tools
+        uses: actions/cache@v4
+        with:
+          path: build/tools
+          key: appimage-tools-linuxdeploy
 
       - name: Install Project Dependencies
         run: |
