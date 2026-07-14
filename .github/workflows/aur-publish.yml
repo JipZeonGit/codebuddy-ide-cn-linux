@@ -25,22 +25,24 @@ jobs:
 
       - name: Parse versions and update PKGBUILD variables
         run: |
-          # Extract variables from Helper repo
           CB_VERSION=$(grep -E '^CB_VERSION\s*:=' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
           CB_BUILD=$(grep -E '^CB_BUILD\s*:=' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
           CB_HASH=$(grep -E '^CB_HASH\s*:=' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
+          HELPER_COMMIT=${{ github.sha }}
 
           echo "==========================================="
           echo "Updating PKGBUILD with target versions:"
           echo "CB_VERSION:       $CB_VERSION"
           echo "CB_BUILD:         $CB_BUILD"
           echo "CB_HASH:          $CB_HASH"
+          echo "HELPER_COMMIT:    $HELPER_COMMIT"
           echo "==========================================="
 
           # Modify PKGBUILD variables dynamically
           sed -i "s/^_cb_ver=.*/_cb_ver=${CB_VERSION}/" .aur/PKGBUILD
           sed -i "s/^_cb_build=.*/_cb_build=${CB_BUILD}/" .aur/PKGBUILD
           sed -i "s/^_cb_hash=.*/_cb_hash=${CB_HASH}/" .aur/PKGBUILD
+          sed -i "s/^_helper_commit=.*/_helper_commit='${HELPER_COMMIT}'/" .aur/PKGBUILD
 
       - name: Regenerate Checksums and .SRCINFO
         run: |
