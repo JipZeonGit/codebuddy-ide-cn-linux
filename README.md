@@ -37,6 +37,8 @@ Codebuddy IDE CN（国内版）的非官方 Linux 自动化包装与安装构建
 ## 项目简介
  
 > ⚠️ **重要提示**：腾讯 CodeBuddy 团队已正式推出官方 Linux x86_64 Debian 分支（`.deb`）安装包。如果您使用的是 Ubuntu、Debian、Linux Mint 或其他 Debian 系发行版，**请直接前往 [CodeBuddy 官网](https://www.codebuddy.cn/ide/) 下载官方 `.deb` 包直接安装，无需使用本项目进行转换。** 本项目主要用于为 Arch Linux、Fedora/RedHat 用户提供打包转换支持，或生成通用的 AppImage 独立包。
+> 
+> *(注：原基于 macOS DMG 提取的旧版移植工作流已安全归档至 [legacy-dmg](https://github.com/JipZeonGit/codebuddy-ide-cn-linux/tree/legacy-dmg) 分支。)*
  
 这是一款非官方社区工具，核心作用是将官方 CodeBuddy IDE CN **Linux x86_64 Debian 分支 .deb 安装包**，重新封装与加工，转换为适用于 Arch Linux (AUR)、RedHat/Fedora (RPM) 以及通用 AppImage 格式的本地 Linux 软件包。
  
@@ -242,6 +244,8 @@ ELECTRON_HEADERS_URL=https://artifacts.electronjs.org/headers/dist make build-ap
 ## 專案簡介
  
 > ⚠️ **重要提示**：騰訊 CodeBuddy 團隊已正式推出官方 Linux x86_64 Debian 分支（`.deb`）安裝包。如果您使用的是 Ubuntu、Debian、Linux Mint 或其他 Debian 系發行版，**請直接前往 [CodeBuddy 官網](https://www.codebuddy.cn/ide/) 下載官方 `.deb` 包直接安裝，無需使用本專案進行轉換。** 本專案主要用於為 Arch Linux、Fedora/RedHat 使用者提供打包轉換支援，或生成通用的 AppImage 獨立包。
+> 
+> *(註：原基於 macOS DMG 提取的舊版移植工作流已安全歸檔至 [legacy-dmg](https://github.com/JipZeonGit/codebuddy-ide-cn-linux/tree/legacy-dmg) 分支。)*
  
 這是一款非官方社群工具，核心作用是將官方 CodeBuddy IDE CN **Linux x86_64 Debian 分支 .deb 安裝包**，重新封裝與加工，轉換為適用於 Arch Linux (AUR)、RedHat/Fedora (RPM) 以及通用 AppImage 格式的本地 Linux 軟體包。
  
@@ -447,6 +451,8 @@ ELECTRON_HEADERS_URL=https://artifacts.electronjs.org/headers/dist make build-ap
 ## Project Introduction
  
 > ⚠️ **IMPORTANT NOTICE**: The Tencent CodeBuddy team has officially released the Linux x86_64 Debian branch (`.deb`) installer package. If you are using Ubuntu, Debian, Linux Mint, or other Debian-based distributions, **please download the official `.deb` package directly from the [CodeBuddy Official Website](https://www.codebuddy.cn/ide/) and install it. There is no need to use this project for repackaging.** This project is primarily intended for Arch Linux (AUR) and Fedora/RedHat (RPM) users who want native integration, or for those who need a standalone AppImage.
+> 
+> *(Note: The legacy migration workflow based on macOS DMG extraction has been archived to the [legacy-dmg](https://github.com/JipZeonGit/codebuddy-ide-cn-linux/tree/legacy-dmg) branch.)*
  
 This is an unofficial community tool designed to repackage and adapt the official CodeBuddy IDE CN **Linux x86_64 Debian branch .deb installer** into various Linux formats, including Arch Linux (AUR), RedHat/Fedora (RPM) packages, and universal AppImages.
  
