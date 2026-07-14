@@ -1,0 +1,155 @@
+name: CI Package Build & Install Test
+
+on:
+  push:
+    branches:
+      - main
+      - '**'
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+  workflow_dispatch:
+
+jobs:
+  test-debian:
+    name: Test Build & Install on Debian/Ubuntu
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+    steps:
+      - name: Install Bootstrap Dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git curl ca-certificates sudo
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Project Dependencies
+        run: |
+          make deps
+
+      - name: Download Upstream DEB
+        run: |
+          make download
+
+      - name: Build Application Directory
+        run: |
+          make build-app
+
+      - name: Create Debian Package
+        run: |
+          make package
+
+      - name: Install Package locally
+        run: |
+          make install
+
+  test-fedora:
+    name: Test Build & Install on Fedora
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+    steps:
+      - name: Install Bootstrap Dependencies
+        run: |
+          dnf install -y git curl sudo
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Project Dependencies
+        run: |
+          make deps
+
+      - name: Download Upstream DEB
+        run: |
+          make download
+
+      - name: Build Application Directory
+        run: |
+          make build-app
+
+      - name: Create RPM Package
+        run: |
+          make package
+
+      - name: Install Package locally
+        run: |
+          make install
+
+  test-arch:
+    name: Test Build & Install on Arch Linux
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Install Bootstrap Dependencies
+        run: |
+          pacman -Syu --noconfirm git curl sudo
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Project Dependencies
+        run: |
+          make deps
+
+      - name: Download Upstream DEB
+        run: |
+          make download
+
+      - name: Build Application Directory
+        run: |
+          make build-app
+
+      - name: Create Arch Pacman Package
+        run: |
+          # Arch linux build needs fakeroot which runs fine in containers.
+          make package
+
+      - name: Install Package locally
+        run: |
+          make install
+
+  test-appimage:
+    name: Test Build AppImage
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+    steps:
+      - name: Install Bootstrap Dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git curl ca-certificates sudo
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Project Dependencies
+        run: |
+          make deps
+
+      - name: Download Upstream DEB
+        run: |
+          make download
+
+      - name: Build Application Directory
+        run: |
+          make build-app
+
+      - name: Build AppImage
+        run: |
+          make appimage
+
+      - name: Verify AppImage exists
+        run: |
+          ls -lh dist/*.AppImage
