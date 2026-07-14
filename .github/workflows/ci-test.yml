@@ -28,7 +28,7 @@ jobs:
       - name: Install Bootstrap Dependencies
         run: |
           apt-get update -qq
-          apt-get install -y -qq git curl ca-certificates sudo
+          apt-get install -y -qq git curl ca-certificates sudo make
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
     steps:
       - name: Install Bootstrap Dependencies
         run: |
-          dnf install -y git curl sudo
+          dnf install -y git curl sudo make
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -94,7 +94,7 @@ jobs:
     steps:
       - name: Install Bootstrap Dependencies
         run: |
-          pacman -Syu --noconfirm git curl sudo
+          pacman -Syu --noconfirm git curl sudo make
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -129,7 +129,7 @@ jobs:
       - name: Install Bootstrap Dependencies
         run: |
           apt-get update -qq
-          apt-get install -y -qq git curl ca-certificates sudo
+          apt-get install -y -qq git curl ca-certificates sudo make
 
       - name: Checkout Code
         uses: actions/checkout@v4
