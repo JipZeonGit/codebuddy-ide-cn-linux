@@ -9,9 +9,9 @@
 # Tencent's proprietary CodeBuddy service license, NOT this MIT notice.
 
 pkgname=codebuddy-ide-cn
-_cb_ver=4.10.1
-_cb_build=33158423
-_cb_hash=3ad58bcb
+_cb_ver=4.10.3
+_cb_build=33770460
+_cb_hash=427f3937
 pkgver="${_cb_ver}.${_cb_build}"
 pkgrel=1
 pkgdesc='腾讯云代码助手CodeBuddy IDE，是一款辅助编码工具。'
@@ -56,7 +56,7 @@ noextract=(
 )
 
 sha256sums=(
-    '838fe89a19f2cac23c02aab67bf5cb34e613323cd47cb811588a3d90d4fe4398'
+    '39d3dac13fa4c3d42ea4d77ce2edfd15c20eb8abc4f819ebb009f984e2fae85f'
     'SKIP'
     'b3260549a765c478dc33680c7b9a1a30e5a038456e340d6d25f7748390724241'
 )

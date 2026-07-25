@@ -20,10 +20,11 @@ remove_known_wrong_platform_modules() {
     rm -rf "$app_dir/node_modules/@vscode/windows-registry" 2>/dev/null || true
     rm -f "$app_dir/node_modules/@vscode/deviceid/build/Release/windows.node" 2>/dev/null || true
 
-    # Clean up proprietary @tencent/qimei-node which is only active on Windows/macOS
+    # Clean up proprietary @tencent/qimei-node / @tencent/qimei-node-unified which are only active on Windows/macOS
     rm -rf "$app_dir/node_modules/@tencent/qimei-node/build" 2>/dev/null || true
     rm -rf "$app_dir/node_modules/@tencent/qimei-node/src/mac" 2>/dev/null || true
     rm -rf "$app_dir/node_modules/@tencent/qimei-node/src/win" 2>/dev/null || true
+    rm -rf "$app_dir/node_modules/@tencent/qimei-node-unified/bindings" 2>/dev/null || true
 
     # Clean up non-Linux prebuilts from koffi (which is used by qimei-node on Windows)
     if [ -d "$app_dir/node_modules/koffi/build/koffi" ]; then
