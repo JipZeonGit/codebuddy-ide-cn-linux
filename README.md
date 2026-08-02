@@ -15,7 +15,7 @@ Codebuddy IDE CN（国内版）的非官方 Linux 自动化包装与安装构建
   <img src="https://img.shields.io/badge/rpm-Fedora_%7C_RHEL-006699?style=flat&logo=fedora&logoColor=white" alt="Fedora RHEL Support">
   <img src="https://img.shields.io/badge/AppImage-All_Distros-007ACC?style=flat&logo=appimage&logoColor=white" alt="AppImage Support">
   <br>
-  <img src="https://img.shields.io/badge/版本适配-v4.10.3-0052D9?style=flat&logo=probot&logoColor=white" alt="Supported Version">
+  <img src="https://img.shields.io/badge/版本适配-v4.10.4-0052D9?style=flat&logo=probot&logoColor=white" alt="Supported Version">
   <img src="https://img.shields.io/badge/Electron-v37.7.0-47307B?style=flat&logo=electron&logoColor=white" alt="Electron Version">
   <img src="https://img.shields.io/badge/状态-Unofficial-d73a49?style=flat" alt="Status Unofficial">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat" alt="License MIT">
@@ -48,7 +48,7 @@ Codebuddy IDE CN（国内版）的非官方 Linux 自动化包装与安装构建
  
 ## 版本适配说明
  
-当前转换流程基于官方 CodeBuddy IDE CN **4.10.3**（构建号 `33770460-427f3937-cn`）验证通过。更高版本的 DEB 安装包可能因为上游代码结构变化导致流程失败。如遇到构建失败或运行异常，请在本仓库提 Issue 并附上所使用的安装包版本号。
+当前转换流程基于官方 CodeBuddy IDE CN **4.10.4**（构建号 `33993995-1ba59196-cn`）验证通过。更高版本的 DEB 安装包可能因为上游代码结构变化导致流程失败。如遇到构建失败或运行异常，请在本仓库提 Issue 并附上所使用的安装包版本号。
  
 各版本间的 Electron 升级、Node 模块变更与移植处理详情，请查阅 [版本变更记录](docs/changelog/)。
  
@@ -110,7 +110,7 @@ make install
 目前项目已完整实现 Linux 端的转换与打包核心流程，具体功能如下：
  
 - 自动提取 `downloads/` 目录下的官方 DEB 安装包 Payload；
-- 从解包的 `package.json` 中，自动识别上游 Electron 版本号（4.10.3 对应 Electron `37.7.0`）；
+- 从解包的 `package.json` 中，自动识别上游 Electron 版本号（4.10.4 对应 Electron `37.7.0`）；
 - 直接复用 DEB 内部自带的原生 Linux `buddycn` 运行时，最大程度保持与官方构建的一致性；
 - **原生模块按需本地补译**：官方 DEB 安装包缺失了部分关键原生模块（如 `node-pty`）的 Linux 预编译二进制文件。本工具会智能识别并仅对这些缺失的模块从 npm 获取完整源码，针对 Electron 37.7.0 本地重新编译并塞回安装目录，而对已正常打包的模块（如 `sqlite3`, `spdlog`）则直接复用；
 - 自动生成 Linux 系统启动器与桌面入口文件，并使用 ImageMagick 自动生成标准 `256x256` 高清图标；
@@ -163,6 +163,15 @@ make run-app
 make package
 make install
 ```
+
+> 💡 **Fedora / RPM 构建警告说明**：
+> 在 Fedora / RedHat 系统上执行 `make package` 或 `make rpm` 时，控制台输出以下警告属**正常现象**：
+> ```text
+> 警告：%source_date_epoch_from_changelog is set, but %changelog has no entries to take a date from
+> 警告：强烈不推荐使用外部的依赖关系生成器！
+> ```
+> - **原因**：脚本为提高 RPM 打包速度，跳过了针对大体积 Electron 目录无意义的二进制与依赖校验扫描，在 Spec 模板中显式关闭了外部依赖检查。
+> - **恢复校验方法**：如需重新开启 RPM 依赖校验，可修改 `scripts/build-rpm.sh`，将 Spec 模板开头的 `%define` 禁用项（如 `%define _use_internal_dependency_generator 0`、`%define __find_requires %{nil}`、`%define __find_provides %{nil}`、`%define __check_files %{nil}`）注释或删除即可。
  
 ### 构建 AppImage
  
@@ -267,7 +276,7 @@ ELECTRON_HEADERS_URL=https://artifacts.electronjs.org/headers/dist make build-ap
  
 ## 版本適配說明
  
-當前轉換流程基於官方 CodeBuddy IDE CN **4.10.3**（構建號 `33770460-427f3937-cn`）驗證通過。更高版本的 DEB 安裝包可能因為上遊程式碼結構變化導致流程失敗。如遇到構建失敗或執行異常，請在本儲存庫提 Issue 並附上所使用的安裝包版本號。
+當前轉換流程基於官方 CodeBuddy IDE CN **4.10.4**（構建號 `33993995-1ba59196-cn`）驗證通過。更高版本的 DEB 安裝包可能因為上遊程式碼結構變化導致流程失敗。如遇到構建失敗或執行異常，請在本儲存庫提 Issue 並附上所使用的安裝包版本號。
  
 各版本間的 Electron 升級、Node 模組變更與移植處理詳情，請查閱 [版本變更記錄](docs/changelog/)。
  
@@ -329,7 +338,7 @@ make install
 目前專案已完整實現 Linux 端的轉換與打包核心流程，具體功能如下：
  
 - 自動提取 `downloads/` 目錄下的官方 DEB 安裝包 Payload；
-- 從解包的 `package.json` 中，自動識別上游 Electron 版本號（4.10.3 對應 Electron `37.7.0`）；
+- 從解包的 `package.json` 中，自動識別上游 Electron 版本號（4.10.4 對應 Electron `37.7.0`）；
 - 直接復用 DEB 內部自帶的原生 Linux `buddycn` 執行時，最大程度保持與官方構建的一致性；
 - **原生模組按需本地補譯**：官方 DEB 安裝包缺失了部分關鍵原生模組（如 `node-pty`）的 Linux 預編譯二進位檔案。本工具會智能識別並僅對這些缺失的模組從 npm 獲取完整原始碼，針對 Electron 37.7.0 本地重新編譯並塞回安裝目錄，而對已正常打包的模組（如 `sqlite3`, `spdlog`）則直接復用；
 - 自動生成 Linux 系統啟動器與桌面入口檔案，並使用 ImageMagick 自動生成標準 `256x256` 高清圖標；
@@ -382,6 +391,15 @@ make run-app
 make package
 make install
 ```
+
+> 💡 **Fedora / RPM 構建警告說明**：
+> 在 Fedora / RedHat 系統上執行 `make package` 或 `make rpm` 時，主控台輸出以下警告屬**正常現象**：
+> ```text
+> 警告：%source_date_epoch_from_changelog is set, but %changelog has no entries to take a date from
+> 警告：强烈不推荐使用外部的依赖关系生成器！
+> ```
+> - **原因**：腳本為提高 RPM 打包速度，跳過了針對大體積 Electron 目錄無意義的二進位與依賴校驗掃描，在 Spec 範本中顯式關閉了外部依賴檢查。
+> - **恢復校驗方法**：如需重新開啟 RPM 依賴校驗，可修改 `scripts/build-rpm.sh`，將 Spec 範本開頭的 `%define` 禁用項（如 `%define _use_internal_dependency_generator 0`、`%define __find_requires %{nil}`、`%define __find_provides %{nil}`、`%define __check_files %{nil}`）註釋或刪除即可。
  
 ### 構建 AppImage
  
@@ -486,7 +504,7 @@ If you encounter bugs, please submit an Issue here. Do not contact Tencent offic
  
 ## Version Compatibility
  
-The current repackaging workflow has been verified against official CodeBuddy IDE CN **4.10.3** (build `33770460-427f3937-cn`). Higher versions of the DEB installer may have upstream code structure changes that prevent the flow from completing. If you encounter build failures or runtime issues, please file an Issue with the package version number.
+The current repackaging workflow has been verified against official CodeBuddy IDE CN **4.10.4** (build `33993995-1ba59196-cn`). Higher versions of the DEB installer may have upstream code structure changes that prevent the flow from completing. If you encounter build failures or runtime issues, please file an Issue with the package version number.
  
 For details on Electron upgrades, Node module changes and porting notes between versions, see the [Changelog](docs/changelog/).
  
@@ -548,7 +566,7 @@ make install
 The project fully implements the core Linux-side repackaging and adaptation workflow:
  
 - Auto-extract the official DEB installer payload in `downloads/`;
-- Detect the upstream Electron version from the extracted `package.json` metadata (4.10.3 matches Electron `37.7.0`);
+- Detect the upstream Electron version from the extracted `package.json` metadata (4.10.4 matches Electron `37.7.0`);
 - Directly reuse the native Linux `buddycn` runtime bundled in the DEB to ensure maximum stability and official consistency;
 - **On-demand Native Module Compilation**: the official DEB installer lacks compiled Linux binaries for several critical native modules (e.g., `node-pty`). This tool automatically downloads the source code from npm for these missing modules and rebuilds them locally against Electron 37.7.0, while keeping and reusing pre-compiled modules (e.g., `sqlite3`, `spdlog`) already present in the DEB;
 - Auto-generate Linux desktop entry and launcher configurations, utilizing ImageMagick to produce a standard `256x256` high-resolution icon;
@@ -601,6 +619,15 @@ Generate a distribution-compatible package and install it locally:
 make package
 make install
 ```
+
+> 💡 **Fedora / RPM Build Warning Note**:
+> When running `make package` or `make rpm` on Fedora / RedHat systems, seeing the following warnings is **normal and expected**:
+> ```text
+> warning: %source_date_epoch_from_changelog is set, but %changelog has no entries to take a date from
+> warning: Explicit definition of %define _use_internal_dependency_generator is strongly discouraged!
+> ```
+> - **Reason**: To significantly speed up RPM packaging and avoid unnecessary dependency scanning overhead on large Electron payload directories, the build script disables external dependency generator checks in the Spec template.
+> - **How to restore checking**: If you want to re-enable RPM dependency scanning, edit `scripts/build-rpm.sh` and remove or comment out the `%define` lines at the beginning of the Spec template (such as `%define _use_internal_dependency_generator 0`, `%define __find_requires %{nil}`, `%define __find_provides %{nil}`, `%define __check_files %{nil}`).
  
 ### Build AppImage
  

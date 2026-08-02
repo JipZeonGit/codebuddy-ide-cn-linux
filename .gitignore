@@ -31,3 +31,7 @@ electron/
 Thumbs.db
 .vscode/
 .idea/
+
+# Agent configuration
+AGENTS.md
+
