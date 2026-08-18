@@ -2,9 +2,9 @@ SHELL := /bin/bash
 
 # ── CodeBuddy DEB download config ──────────────────────────────────
 # Only update these three values when a new version is released.
-CB_VERSION  := 4.10.4
-CB_BUILD    := 33993995
-CB_HASH     := 1ba59196
+CB_VERSION  := 4.11.1
+CB_BUILD    := 36020259
+CB_HASH     := b72e1c95
 # ───────────────────────────────────────────────────────────────────
 CB_BASE_URL     := https://download.codebuddy.cn/aiide/linux-x64/CodeBuddy-linux-x64-
 CB_SUFFIX       := -cn.deb
