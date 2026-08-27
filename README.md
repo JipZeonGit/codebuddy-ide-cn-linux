@@ -15,7 +15,7 @@ Codebuddy IDE CN（国内版）的非官方 Linux 自动化包装与安装构建
   <img src="https://img.shields.io/badge/rpm-Fedora_%7C_RHEL-006699?style=flat&logo=fedora&logoColor=white" alt="Fedora RHEL Support">
   <img src="https://img.shields.io/badge/AppImage-All_Distros-007ACC?style=flat&logo=appimage&logoColor=white" alt="AppImage Support">
   <br>
-  <img src="https://img.shields.io/badge/版本适配-v4.11.1-0052D9?style=flat&logo=probot&logoColor=white" alt="Supported Version">
+  <img src="https://img.shields.io/badge/版本适配-v4.11.2-0052D9?style=flat&logo=probot&logoColor=white" alt="Supported Version">
   <img src="https://img.shields.io/badge/Electron-v37.7.0-47307B?style=flat&logo=electron&logoColor=white" alt="Electron Version">
   <img src="https://img.shields.io/badge/状态-Unofficial-d73a49?style=flat" alt="Status Unofficial">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat" alt="License MIT">
@@ -48,7 +48,7 @@ Codebuddy IDE CN（国内版）的非官方 Linux 自动化包装与安装构建
  
 ## 版本适配说明
  
-当前转换流程基于官方 CodeBuddy IDE CN **4.11.1**（构建号 `36020259-b72e1c95-cn`）验证通过。更高版本的 DEB 安装包可能因为上游代码结构变化导致流程失败。如遇到构建失败或运行异常，请在本仓库提 Issue 并附上所使用的安装包版本号。
+当前转换流程基于官方 CodeBuddy IDE CN **4.11.2**（构建号 `36529961-74e2511a-cn`）验证通过。更高版本的 DEB 安装包可能因为上游代码结构变化导致流程失败。如遇到构建失败或运行异常，请在本仓库提 Issue 并附上所使用的安装包版本号。
  
 各版本间的 Electron 升级、Node 模块变更与移植处理详情，请查阅 [版本变更记录](docs/changelog/)。
  
@@ -276,7 +276,7 @@ ELECTRON_HEADERS_URL=https://artifacts.electronjs.org/headers/dist make build-ap
  
 ## 版本適配說明
  
-當前轉換流程基於官方 CodeBuddy IDE CN **4.11.1**（構建號 `36020259-b72e1c95-cn`）驗證通過。更高版本的 DEB 安裝包可能因為上遊程式碼結構變化導致流程失敗。如遇到構建失敗或執行異常，請在本儲存庫提 Issue 並附上所使用的安裝包版本號。
+當前轉換流程基於官方 CodeBuddy IDE CN **4.11.2**（構建號 `36529961-74e2511a-cn`）驗證通過。更高版本的 DEB 安裝包可能因為上遊程式碼結構變化導致流程失敗。如遇到構建失敗或執行異常，請在本儲存庫提 Issue 並附上所使用的安裝包版本號。
  
 各版本間的 Electron 升級、Node 模組變更與移植處理詳情，請查閱 [版本變更記錄](docs/changelog/)。
  
@@ -338,7 +338,7 @@ make install
 目前專案已完整實現 Linux 端的轉換與打包核心流程，具體功能如下：
  
 - 自動提取 `downloads/` 目錄下的官方 DEB 安裝包 Payload；
-- 從解包的 `package.json` 中，自動識別上游 Electron 版本號（4.11.1 對應 Electron `37.7.0`）；
+- 從解包的 `package.json` 中，自動識別上游 Electron 版本號（4.11.2 對應 Electron `37.7.0`）；
 - 直接復用 DEB 內部自帶的原生 Linux `buddycn` 執行時，最大程度保持與官方構建的一致性；
 - **原生模組按需本地補譯**：官方 DEB 安裝包缺失了部分關鍵原生模組（如 `node-pty`）的 Linux 預編譯二進位檔案。本工具會智能識別並僅對這些缺失的模組從 npm 獲取完整原始碼，針對 Electron 37.7.0 本地重新編譯並塞回安裝目錄，而對已正常打包的模組（如 `sqlite3`, `spdlog`）則直接復用；
 - 自動生成 Linux 系統啟動器與桌面入口檔案，並使用 ImageMagick 自動生成標準 `256x256` 高清圖標；
@@ -504,7 +504,7 @@ If you encounter bugs, please submit an Issue here. Do not contact Tencent offic
  
 ## Version Compatibility
  
-The current repackaging workflow has been verified against official CodeBuddy IDE CN **4.11.1** (build `36020259-b72e1c95-cn`). Higher versions of the DEB installer may have upstream code structure changes that prevent the flow from completing. If you encounter build failures or runtime issues, please file an Issue with the package version number.
+The current repackaging workflow has been verified against official CodeBuddy IDE CN **4.11.2** (build `36529961-74e2511a-cn`). Higher versions of the DEB installer may have upstream code structure changes that prevent the flow from completing. If you encounter build failures or runtime issues, please file an Issue with the package version number.
  
 For details on Electron upgrades, Node module changes and porting notes between versions, see the [Changelog](docs/changelog/).
  
@@ -566,7 +566,7 @@ make install
 The project fully implements the core Linux-side repackaging and adaptation workflow:
  
 - Auto-extract the official DEB installer payload in `downloads/`;
-- Detect the upstream Electron version from the extracted `package.json` metadata (4.11.1 matches Electron `37.7.0`);
+- Detect the upstream Electron version from the extracted `package.json` metadata (4.11.2 matches Electron `37.7.0`);
 - Directly reuse the native Linux `buddycn` runtime bundled in the DEB to ensure maximum stability and official consistency;
 - **On-demand Native Module Compilation**: the official DEB installer lacks compiled Linux binaries for several critical native modules (e.g., `node-pty`). This tool automatically downloads the source code from npm for these missing modules and rebuilds them locally against Electron 37.7.0, while keeping and reusing pre-compiled modules (e.g., `sqlite3`, `spdlog`) already present in the DEB;
 - Auto-generate Linux desktop entry and launcher configurations, utilizing ImageMagick to produce a standard `256x256` high-resolution icon;
