@@ -47,16 +47,38 @@ install_pacman() {
     sudo pacman -U --noconfirm "$artifact"
 }
 
+detect_install_format() {
+    if [ -f /etc/os-release ]; then
+        local id id_like
+        . /etc/os-release
+        id_like="${ID_LIKE:-$ID}"
+        case "$ID $id_like" in
+            *fedora*|*rhel*|*centos*|*rocky*|*alma*|*suse*) echo "rpm"; return 0 ;;
+            *debian*|*ubuntu*|*mint*) echo "deb"; return 0 ;;
+            *arch*|*manjaro*) echo "pacman"; return 0 ;;
+        esac
+    fi
+    # Fallback
+    if command -v dpkg >/dev/null 2>&1; then echo "deb"
+    elif command -v rpm >/dev/null 2>&1; then echo "rpm"
+    elif command -v pacman >/dev/null 2>&1; then echo "pacman"
+    fi
+}
+
 main() {
-    if command -v dpkg >/dev/null 2>&1 && install_deb; then
-        return 0
-    fi
-    if install_rpm; then
-        return 0
-    fi
-    if install_pacman; then
-        return 0
-    fi
+    local fmt
+    fmt="$(detect_install_format)"
+
+    case "$fmt" in
+        deb) install_deb && return 0 ;;
+        rpm) install_rpm && return 0 ;;
+        pacman) install_pacman && return 0 ;;
+    esac
+
+    # Ultimate fallback: try all in order
+    if install_rpm; then return 0; fi
+    if install_deb; then return 0; fi
+    if install_pacman; then return 0; fi
 
     error "No installable package artifact found in dist/. Run make package first."
 }
