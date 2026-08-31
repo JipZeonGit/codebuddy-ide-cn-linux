@@ -69,7 +69,7 @@ EOF
     fi
 
     local changelog_date
-    changelog_date="$(date -u '+%a %b %d %Y')"
+    changelog_date="$(LANG=C date -u '+%a %b %d %Y')"
 
     cat > "$SPEC_FILE" <<EOF
 %define _use_internal_dependency_generator 0
